@@ -2,9 +2,11 @@
 - Git
 - Java
 - Maven
+
 Maven is a build automation tool used primarily for Java projects which describes how software is built and its dependencies. The backend part of this project is managed with Maven. You can click the link below to see more information and how to install it.
 https://maven.apache.org/
 - NPM
+
 npm is a package manager for the JavaScript programming language. You can click the link below to see more information and how to install it.
 https://www.npmjs.com/
 
