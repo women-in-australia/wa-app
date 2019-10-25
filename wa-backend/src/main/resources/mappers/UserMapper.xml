@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bilby.wa.dao.UserDao">
+    <resultMap id="userMap" type="User">
+        <id column="uid" property="uid" jdbcType="INTEGER"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="motivation" property="motivation" jdbcType="VARCHAR"/>
+        <result column="experience" property="experience" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" jdbcType="INTEGER"/>
+        <result column="invited" property="invited" jdbcType="VARCHAR" />
+        <result column="msg" property="msg" jdbcType="BOOLEAN" />
+        <association property="role" javaType="Role">
+            <id column="rid" property="rid" jdbcType="INTEGER"/>
+            <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="userInfoMap" type="User">
+        <id column="uid" property="uid" jdbcType="INTEGER"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="motivation" property="motivation" jdbcType="VARCHAR"/>
+        <result column="experience" property="experience" jdbcType="VARCHAR"/>
+        <result column="enabled" property="enabled" jdbcType="INTEGER"/>
+        <result column="invited" property="invited" jdbcType="VARCHAR" />
+        <association property="role" javaType="Role">
+            <id column="rid" property="rid" jdbcType="INTEGER"/>
+            <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <select id="selectContributorByEntity" parameterType="Integer" resultMap="userInfoMap">
+        select * from user
+        join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid
+        join user_contribute on user_contribute.uid = user.uid
+        join entity on user_contribute.eid = entity.eid
+        where entity.eid = #{eid}
+    </select>
+
+    <select id="selectAllUsers" resultMap="userMap">
+        select * from user join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid order by user.uid desc
+    </select>
+
+    <select id="selectUsersToReview" resultMap="userMap">
+        select * from user join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid where user.enabled = 0
+        order by user.uid desc
+    </select>
+
+    <select id="selectUsersEnabled" resultMap="userMap">
+        select * from user join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid where user.enabled = 1
+        order by user.uid desc
+    </select>
+
+    <select id="selectUsersRejected" resultMap="userMap">
+        select * from user join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid where user.enabled = -1
+        order by user.uid desc
+    </select>
+
+    <select id="selectUserByUserName" resultMap="userMap" parameterType="String">
+        select * from user join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid where email = #{username}
+    </select>
+
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="uid">
+        INSERT INTO user (`uid`, `email`, `password`, `name`, `phone`, `address`, `motivation`, `experience`, `invited`)
+        VALUES (NULL, #{email}, #{password}, #{name}, #{phone}, #{address}, #{motivation}, #{experience}, #{invited})
+    </insert>
+
+    <insert id="insertRole" parameterType="UserRole">
+        insert into user_role values (#{uid}, #{rid})
+    </insert>
+
+    <select id="selectByEmail" resultMap="userMap" parameterType="String">
+        select * from join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid user where user.email = #{email}
+    </select>
+
+    <select id="selectById" resultMap="userMap" parameterType="Integer">
+        select * from user join user_role on user.uid = user_role.uid
+        join role on role.rid = user_role.rid where user.uid = #{uid}
+    </select>
+
+    <update id="enableUser" parameterType="Integer">
+        update user set enabled = 1 where uid = #{uid}
+    </update>
+
+    <update id="rejectUser" parameterType="Integer">
+        update user set enabled = -1 where uid = #{uid}
+    </update>
+
+    <update id="updatePassword">
+        update user set password = #{password} where email = #{email}
+    </update>
+
+    <update id="modifyRole" parameterType="UserRole">
+        update user_role set rid = #{rid} where uid = #{uid}
+    </update>
+
+    <select id="selectAllManagerId" resultType="Integer">
+        select user.uid from user join user_role on user.uid = user_role.uid
+        where user_role.rid = 3
+    </select>
+
+    <select id="selectAllEmailManagerId" resultType="Integer">
+        select user.uid from user join user_role on user.uid = user_role.uid
+        where user_role.rid = 3 and user.msg = true
+    </select>
+
+    <select id="selectAllCuratorId" resultType="Integer">
+        select user.uid from user join user_role on user.uid = user_role.uid
+        where user_role.rid = 2
+    </select>
+
+    <select id="receiveEmail" parameterType="Integer" resultType="Boolean">
+        select msg from user where uid = #{uid}
+    </select>
+
+    <update id="setReceiveEmail">
+        update user set msg = #{receive, jdbcType=BOOLEAN} where uid = #{uid, jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bilby.wa.dao.MessageDao">
+    <resultMap id="messageMap" type="Message">
+        <id column="mid" property="mid" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="link" property="link" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="unread" property="unread" jdbcType="BOOLEAN" />
+    </resultMap>
+
+    <select id="selectAllMessageById" parameterType="Integer" resultMap="messageMap">
+        select * from message where uid = #{uid} order by time desc
+    </select>
+
+    <insert id="insertMessage" parameterType="Message">
+        INSERT INTO `message` (`mid`, `uid`, `type`, `content`, `link`, `time`, `unread`)
+        VALUES (NULL, #{uid}, #{type}, #{content}, #{link}, CURRENT_TIMESTAMP, '1')
+    </insert>
+
+</mapper>

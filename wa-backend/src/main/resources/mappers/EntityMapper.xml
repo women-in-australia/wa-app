@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bilby.wa.dao.EntityDao">
+
+    <resultMap id="entityListItemMap" type="EntityListItem">
+        <id column="eid" property="eid" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="ename" property="name" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="is_draft" property="isDraft" jdbcType="BOOLEAN" />
+        <association property="from" javaType="User">
+            <id column="uid" property="uid" jdbcType="INTEGER"/>
+            <result column="email" property="email" jdbcType="VARCHAR"/>
+            <result column="uname" property="name" jdbcType="VARCHAR"/>
+            <result column="address" property="address" jdbcType="VARCHAR"/>
+            <result column="motivation" property="motivation" jdbcType="VARCHAR"/>
+            <result column="experience" property="experience" jdbcType="VARCHAR"/>
+            <association property="role" javaType="Role">
+                <id column="rid" property="rid" jdbcType="INTEGER"/>
+                <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <resultMap id="userReviewMap" type="UserReview">
+        <id column="urid" property="urid" jdbcType="INTEGER"/>
+        <result column="review_time" property="reviewTime" jdbcType="INTEGER" />
+        <result column="feedback" property="feedback" jdbcType="VARCHAR"/>
+        <result column="status_name" property="statusName" jdbcType="INTEGER" />
+        <result column="status_start" property="statusStart" jdbcType="INTEGER" />
+        <result column="status_end" property="statusEnd" jdbcType="INTEGER" />
+        <result column="status_summary" property="statusSummary" jdbcType="INTEGER" />
+        <result column="status_detail" property="statusDetail" jdbcType="INTEGER" />
+        <result column="status_notes" property="statusNotes" jdbcType="INTEGER" />
+        <association property="reviewer" javaType="User">
+            <id column="uid" property="uid" jdbcType="INTEGER"/>
+            <result column="email" property="email" jdbcType="VARCHAR"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="VARCHAR" />
+            <result column="address" property="address" jdbcType="VARCHAR"/>
+            <result column="motivation" property="motivation" jdbcType="VARCHAR"/>
+            <result column="experience" property="experience" jdbcType="VARCHAR"/>
+            <result column="enabled" property="enabled" jdbcType="INTEGER"/>
+            <result column="invited" property="invited" jdbcType="VARCHAR" />
+            <association property="role" javaType="Role">
+                <id column="rid" property="rid" jdbcType="INTEGER"/>
+                <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <resultMap id="entityDetailMap" type="EntityReviewDetail">
+        <id column="eid" property="eid" jdbcType="INTEGER"/>
+        <result column="exist_eid" property="existEid" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="subname" property="subname" jdbcType="VARCHAR"/>
+        <result column="start_date" property="startDate" jdbcType="VARCHAR"/>
+        <result column="end_date" property="endDate" jdbcType="VARCHAR"/>
+        <result column="birth_place" property="birthPlace" jdbcType="VARCHAR"/>
+        <result column="birth_state" property="birthState" jdbcType="VARCHAR"/>
+        <result column="birth_country" property="birthCountry" jdbcType="VARCHAR"/>
+        <result column="death_place" property="deathPlace" jdbcType="VARCHAR"/>
+        <result column="death_state" property="deathState" jdbcType="VARCHAR"/>
+        <result column="death_country" property="deathCountry" jdbcType="VARCHAR"/>
+        <result column="summary" property="summary" jdbcType="VARCHAR"/>
+        <result column="detail" property="detail" jdbcType="VARCHAR"/>
+        <result column="notes" property="notes" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="is_draft" property="isDraft" jdbcType="BOOLEAN" />
+        <result column="photo" property="photo" jdbcType="VARCHAR"/>
+        <collection property="occupations" ofType="Occupation">
+            <id column="eoid" property="eoid" jdbcType="INTEGER"/>
+            <id column="oid" property="oid" jdbcType="INTEGER"/>
+            <result column="oname" property="oname" jdbcType="VARCHAR"/>
+            <result column="eo_status" property="ostatus" jdbcType="INTEGER"/>
+        </collection>
+        <collection property="relatedEntities" ofType="RelatedEntity">
+            <id column="roid" property="roid" jdbcType="INTEGER"/>
+            <result column="related_eid" property="relatedEid" jdbcType="INTEGER"/>
+            <result column="related_ename" property="relatedEname" jdbcType="VARCHAR"/>
+            <result column="related_etype" property="relatedEtype" jdbcType="INTEGER"/>
+            <result column="relationship" property="relationship" jdbcType="INTEGER"/>
+            <result column="status_re" property="statusRe" jdbcType="INTEGER"/>
+        </collection>
+        <collection property="digitalResources" ofType="DigitalResources">
+            <id column="drid" property="drid" jdbcType="INTEGER"/>
+            <result column="dr_title" property="drTitle" jdbcType="VARCHAR"/>
+            <result column="dr_date" property="drDate" jdbcType="VARCHAR"/>
+            <result column="dr_repository" property="drRepository" jdbcType="VARCHAR"/>
+            <result column="dr_url" property="drUrl" jdbcType="VARCHAR"/>
+            <result column="dr_note" property="drNote" jdbcType="VARCHAR"/>
+            <result column="dr_status" property="drStatus" jdbcType="INTEGER"/>
+        </collection>
+        <collection property="publishedResources" ofType="PublishedResources">
+            <id column="prid" property="prid" jdbcType="INTEGER"/>
+            <result column="pr_title" property="prTitle" jdbcType="VARCHAR"/>
+            <result column="pr_date" property="prDate" jdbcType="VARCHAR"/>
+            <result column="pr_publisher" property="prPublisher" jdbcType="VARCHAR"/>
+            <result column="pr_url" property="prUrl" jdbcType="VARCHAR"/>
+            <result column="pr_note" property="prNote" jdbcType="VARCHAR"/>
+            <result column="pr_status" property="prStatus" jdbcType="INTEGER"/>
+        </collection>
+        <collection property="archivalResources" ofType="ArchivalResources">
+            <id column="arid" property="arid" jdbcType="INTEGER"/>
+            <result column="ar_title" property="arTitle" jdbcType="VARCHAR"/>
+            <result column="ar_repository" property="arRepository" jdbcType="VARCHAR"/>
+            <result column="ar_date" property="arDate" jdbcType="VARCHAR"/>
+            <result column="ar_abstract" property="arAbstract" jdbcType="VARCHAR"/>
+            <result column="ar_url" property="arUrl" jdbcType="VARCHAR"/>
+            <result column="ar_note" property="arNote" jdbcType="VARCHAR"/>
+            <result column="ar_status" property="arStatus" jdbcType="INTEGER"/>
+        </collection>
+        <collection property="alternativeNames" ofType="AlternativeName">
+            <id column="anid" property="anid" jdbcType="INTEGER"/>
+            <result column="aname" property="aname" jdbcType="VARCHAR"/>
+            <result column="atype" property="atype" jdbcType="INTEGER"/>
+            <result column="astatus" property="astatus" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="entityNamePromptMap" type="EntityNamePrompt">
+        <id column="eid" property="eid" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="entityOccupationPromptMap" type="EntityOccupationPrompt">
+        <id column="oid" property="oid" jdbcType="INTEGER"/>
+        <result column="oname" property="oname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectUserReview" parameterType="Integer" resultMap="userReviewMap">
+        select * from entity
+        left join user_review on entity.eid = user_review.eid
+        left join user on user_review.uid = user.uid where entity.eid = #{eid}
+         order by user_review.review_time desc limit 1
+    </select>
+
+    <select id="selectEntityDetail" parameterType="Integer" resultMap="entityDetailMap">
+        select * from entity
+        left join alternative_name on entity.eid = alternative_name.eid
+        left join archival_resources on archival_resources.eid = entity.eid
+        left join digital_resources on digital_resources.eid = entity.eid
+        left join published_resources on published_resources.eid = entity.eid
+        left join entity_occupation on entity.eid = entity_occupation.eid
+        left join occupation on occupation.oid = entity_occupation.oid
+        left join related_entity on related_entity.eid = entity.eid
+        where entity.eid = #{eid}
+    </select>
+
+    <select id="selectMyEntities" parameterType="Integer" resultMap="entityListItemMap">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+          FROM entity join user_contribute on entity.eid = user_contribute.eid
+        join user on user.uid = user_contribute.uid where user.uid = #{uid} and entity.is_draft != true
+        order by entity.create_time desc
+    </select>
+
+    <select id="selectMyEntitiesWithStatus" parameterType="Integer" resultMap="entityListItemMap">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+          FROM entity join user_contribute on entity.eid = user_contribute.eid
+        join user on user.uid = user_contribute.uid where user.uid = #{uid, jdbcType=INTEGER} and entity.status = #{status, jdbcType=INTEGER} and entity.is_draft != true
+        order by entity.create_time desc
+    </select>
+
+    <select id="selectMyEntityDrafts" parameterType="Integer" resultMap="entityListItemMap">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+          FROM entity join user_contribute on entity.eid = user_contribute.eid
+        join user on user.uid = user_contribute.uid where user.uid = #{uid} and entity.is_draft = true
+        order by entity.create_time desc
+    </select>
+
+    <insert id="insertPersonEntity" parameterType="com.bilby.wa.pojo.Entity" useGeneratedKeys="true" keyProperty="eid">
+        INSERT INTO entity (eid, exist_eid, type, name,
+        subname, start_date, end_date, birth_place,
+        birth_state, birth_country, death_place, death_state,
+        death_country, summary, detail, notes, is_draft, status,
+        photo, create_time, last_edit_time) VALUES
+        (NULL, NULL, #{type}, #{name}, #{subname}, #{startDate},
+        #{endDate}, #{birthPlace}, #{birthState}, #{birthCountry}, #{deathPlace},
+        #{deathState}, #{deathCountry}, #{summary}, #{detail}, #{notes},
+        #{isDraft}, #{status}, #{photo}, CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP)
+    </insert>
+
+    <insert id="insertOrgEntity" parameterType="com.bilby.wa.pojo.Entity" useGeneratedKeys="true" keyProperty="eid">
+        INSERT INTO entity (eid, exist_eid, type, name,
+        subname, start_date, end_date, birth_place,
+        birth_state, birth_country, death_place, death_state,
+        death_country, summary, detail, notes, is_draft, status,
+        photo, create_time, last_edit_time) VALUES
+        (NULL, NULL, #{type}, #{name}, #{subname}, #{startDate},
+        #{endDate}, #{birthPlace}, #{birthState}, #{birthCountry}, #{deathPlace},
+        #{deathState}, #{deathCountry}, #{summary}, #{detail}, #{notes},
+        #{isDraft}, #{status}, #{photo}, CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="updateEntity" parameterType="Entity">
+        UPDATE `entity` SET `name` = #{name}, `subname` = #{subname},
+        `start_date` = #{startDate}, `end_date` = #{endDate},
+        `birth_place` = #{birthPlace}, `birth_state` =  #{birthState},
+        `birth_country` = #{birthCountry}, `death_place` = #{deathPlace},
+        `death_state` = #{deathState}, `death_country` = #{deathCountry},
+        `summary` = #{summary}, `detail` = #{detail}, `notes` = #{notes},
+        `status` = #{status}, `photo` = #{photo}
+        WHERE `eid` = #{eid}
+    </update>
+
+    <insert id="insertUserReview" parameterType="UserReview">
+        INSERT INTO `user_review` (`urid`, `uid`, `eid`,
+        `review_time`, `feedback`, `status_name`, `status_start`,
+        `status_end`, `status_summary`, `status_detail`,
+        `status_notes`) VALUES (NULL,
+        #{reviewer.uid}, #{eid}, CURRENT_TIMESTAMP, #{feedback},
+        #{statusName}, #{statusStart}, #{statusEnd}, #{statusSummary},
+        #{statusDetail}, #{statusNotes})
+    </insert>
+
+    <select id="selectAllEntityList" resultMap="entityListItemMap">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+         from entity join user_contribute on
+        entity.eid = user_contribute.eid join user on
+        user.uid = user_contribute.uid where is_draft = false
+        order by entity.create_time desc
+    </select>
+
+    <select id="selectAllEntityListWithStatus" resultMap="entityListItemMap" parameterType="Integer">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+         from entity join user_contribute on
+        entity.eid = user_contribute.eid join user on
+        user.uid = user_contribute.uid where is_draft = false and entity.status = #{status}
+        order by entity.create_time desc
+    </select>
+
+    <select id="selectToDoEntityList" resultMap="entityListItemMap">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+          from entity join user_contribute on
+        entity.eid = user_contribute.eid join user on
+        user.uid = user_contribute.uid where status = 0 and is_draft = false
+        order by entity.create_time desc
+    </select>
+
+    <select id="selectToDoEntityListWithStatus" resultMap="entityListItemMap">
+        select entity.eid, entity.type, entity.name as ename,
+         entity.status, entity.is_draft, user.uid, user.name as uname, user.email, user.address,
+         user.motivation, user.experience, user.enabled, user.invited
+          from entity join user_contribute on
+        entity.eid = user_contribute.eid join user on
+        user.uid = user_contribute.uid where status = 0 and is_draft = false and entity.status = #{status}
+        order by entity.create_time desc
+    </select>
+    
+    <insert id="insertRelatedEntity" parameterType="com.bilby.wa.pojo.RelatedEntity">
+        INSERT INTO related_entity (roid, eid, related_eid, related_ename, related_etype, relationship, status_re)
+        VALUES (NULL, #{eid}, #{relatedEid}, #{relatedEname}, #{relatedEtype}, #{relationship}, 0 )
+    </insert>
+
+    <update id="updateRelatedEntity" parameterType="com.bilby.wa.pojo.RelatedEntity">
+        UPDATE `related_entity` SET
+        `related_ename` = #{relatedEname},
+        `related_etype` = #{relatedEtype},
+        `relationship` = #{relationship},
+        `status_re` = #{statusRe}
+        WHERE `roid` = #{roid}
+    </update>
+
+    <insert id="insertPublishedRes">
+        INSERT INTO published_resources (`eid`, `pr_title`, `pr_publisher`, `pr_url`,
+        `pr_date`, `pr_note`)
+        VALUES (#{eid, jdbcType=INTEGER},
+        #{title, jdbcType=VARCHAR},
+        #{publisher, jdbcType=VARCHAR},
+        #{url, jdbcType=VARCHAR},
+         #{date, jdbcType=VARCHAR},
+         #{note, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updatePublishedRes">
+        UPDATE `published_resources` SET
+        `pr_title` = #{title, jdbcType=VARCHAR},
+        `pr_publisher` = #{publisher, jdbcType=VARCHAR},
+        `pr_url` = #{url, jdbcType=VARCHAR},
+        `pr_date` = #{date, jdbcType=VARCHAR},
+        `pr_note` = #{note, jdbcType=VARCHAR},
+        `pr_status` = #{status, jdbcType=INTEGER}
+        WHERE `prid` = #{prid, jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertDigitalRes">
+        INSERT INTO digital_resources (`eid`, `dr_title`, `dr_date`,
+        `dr_repository`, `dr_url`, `dr_note`)
+        VALUES (#{eid, jdbcType=INTEGER},
+        #{title, jdbcType=VARCHAR},
+        #{date, jdbcType=VARCHAR},
+        #{repository, jdbcType=VARCHAR},
+        #{url, jdbcType=VARCHAR},
+        #{note, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateDigitalRes">
+        UPDATE `digital_resources` SET
+        `dr_title` = #{title, jdbcType=VARCHAR},
+        `dr_date` = #{date, jdbcType=VARCHAR},
+        `dr_repository` = #{repository, jdbcType=VARCHAR},
+        `dr_url` = #{url, jdbcType=VARCHAR},
+        `dr_note` = #{note, jdbcType=VARCHAR},
+        `dr_status` = #{status, jdbcType=INTEGER}
+        WHERE `drid` = #{drid, jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertArchivalRes">
+        INSERT INTO archival_resources (`eid`, `ar_repository`, `ar_title`,
+        `ar_date`, `ar_abstract`, `ar_url`, `ar_note`)
+        VALUES (#{eid, jdbcType=INTEGER},
+        #{repository, jdbcType=VARCHAR},
+        #{title, jdbcType=VARCHAR},
+        #{date, jdbcType=VARCHAR},
+        #{abstract, jdbcType=VARCHAR},
+        #{url, jdbcType=VARCHAR},
+        #{note, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateArchivalRes">
+        UPDATE `archival_resources` SET
+        `ar_repository` = #{repository, jdbcType=VARCHAR},
+        `ar_title` = #{title, jdbcType=VARCHAR},
+        `ar_date` = #{date, jdbcType=VARCHAR},
+        `ar_abstract` = #{abstract, jdbcType=VARCHAR},
+        `ar_url` = #{url, jdbcType=VARCHAR},
+        `ar_note` = #{note, jdbcType=VARCHAR},
+        `ar_status` = #{status, jdbcType=INTEGER}
+        WHERE `arid` = #{arid, jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertAlternativaName">
+        INSERT INTO `alternative_name` (`eid`, `aname`, `atype`)
+        VALUES (#{eid, jdbcType=INTEGER},
+        #{aname, jdbcType=VARCHAR},
+        #{atype, jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateAlternativaName">
+        UPDATE `alternative_name` SET
+        `aname` = #{aname, jdbcType=VARCHAR},
+        `atype` = #{atype, jdbcType=INTEGER},
+        `astatus` = #{astatus, jdbcType=INTEGER}
+        WHERE `anid` = #{anid, jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertUserContribute">
+        INSERT INTO user_contribute (uid, eid)
+        VALUES (#{uid, jdbcType=INTEGER}, #{eid, jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertEntityOccupation">
+        INSERT INTO entity_occupation (eid, oid)
+        VALUES (#{eid, jdbcType=INTEGER}, #{oid, jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateEntityOccupation">
+        UPDATE `entity_occupation` SET
+        `oid` = #{oid, jdbcType=INTEGER},
+        `eo_status` = #{status, jdbcType=INTEGER}
+        WHERE `eoid` = #{eoid, jdbcType=INTEGER}
+    </update>
+
+    <select id="namePrompt" parameterType="String" resultMap="entityNamePromptMap">
+        select eid, name from entity where eid in
+        (select min(eid) from entity group by name) and name
+        like #{input, jdbcType=VARCHAR}"%"
+        and `type` = #{type, javaType=Integer, jdbcType=INTEGER}
+        limit 10
+    </select>
+
+    <select id="checkEntityByName" parameterType="String" resultType="Integer">
+        select eid from entity where `name` = #{input} limit 1
+    </select>
+
+    <select id="occupationPrompt" parameterType="String" resultMap="entityOccupationPromptMap">
+        select oid, oname from occupation where oname
+        like #{input, jdbcType=VARCHAR}"%" limit 6
+    </select>
+
+    <select id="occupationPromptEmpty" parameterType="String" resultMap="entityOccupationPromptMap">
+        select oid, oname from occupation limit 6
+    </select>
+
+    <select id="checkOccupation" parameterType="String" resultType="Integer">
+        select oid from occupation where `oname` = #{input} limit 1
+    </select>
+
+    <select id="deleteEntity" parameterType="Integer">
+        delete from entity where eid = #{eid}
+    </select>
+
+    <select id="getEntityContributor" parameterType="Integer" resultType="Integer">
+        SELECT uid from user_contribute where eid = #{eid}
+    </select>
+
+</mapper>

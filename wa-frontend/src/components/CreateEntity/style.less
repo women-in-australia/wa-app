@@ -1,0 +1,71 @@
+/*
+  this is a style sheet for create Entity(including createPerson and createOrganization)
+*/
+
+@height : 300px;
+
+.first-row {
+  @cur_height: @height;
+  min-height: @cur_height;
+  :global {
+    .left-col {
+      text-align: center;
+      .upload-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .upload-div {
+        @cur_height: @height - 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        //because antd add a margin
+        width: @cur_height;
+        height: @cur_height - 30px;
+        // margin-left: auto;
+        // margin-right: auto;
+      }
+      .judge-div {
+        height: 40px;
+        padding-left: @cur_height + 30px;
+      }
+    }
+    .right-col {
+      height: @cur_height;
+      overflow-y: scroll;
+    }
+  }
+
+  //   .right-col::-webkit-scrollbar {
+  //     display: none;
+  //   }
+}
+
+.second-row {
+  @cur_height: @height * 2.4;
+  min-height: @cur_height;
+  // .left-col {
+  //     text-align: center;
+  // }
+  :global(.right-col) {
+    height: @cur_height;
+    overflow-y: scroll;
+  }
+  //   .right-col::-webkit-scrollbar {
+  //     display: none;
+  //   }
+}
+
+.third-row {
+  @cur_height: @height;
+  min-height: @cur_height;
+  :global {
+    .left-col,
+    .right-col,
+    .mid-col {
+      height: @cur_height;
+      overflow-y: scroll;
+    }
+  }
+}
